@@ -1,6 +1,5 @@
 package com.example.springboot.controllers;
 
-
 import com.example.springboot.dtos.ProductRecordDto;
 import com.example.springboot.models.ProductModel;
 import com.example.springboot.repositories.ProductRepository;
@@ -56,7 +55,14 @@ public class ProductController {
 
     }
 
-
-
+    @DeleteMapping("/products/{id}")
+    public ResponseEntity<Object> deleteProduct(@PathVariable(value="id") UUID id) {
+        Optional<ProductModel> productO = productRepository.findById(id);
+        if(productO.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found.");
+        }
+        productRepository.delete(productO.get());
+        return  ResponseEntity.status(HttpStatus.OK).body("Product deleted successfully.");
+    }
 
 }
